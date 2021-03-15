@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>post your sunny quotes here</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="container">
+      <form id="js-form">
+        <div>
+          <textarea id="js-quote" name="quote" placeholder="Insert quote..."></textarea>
+        </div>
+        <div>
+          <input id="js-character" type="text" name="character" placeholder="Character">
+        </div>
+        <button type="submit" name="button">
+          Submit
+        </button>
+      </form>
+      <div class="error-content">
+        <div>
+          <div>idk bro something went wrong</div>
+          <div><a href="/">try again?</a></div>
+        </div>
+      </div>
+      <div class="success-content">
+        <div>
+          <div>thanks for your contribution</div>
+          <div><a href="/">Add another quote</a></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+<style media="screen">
+  form {
+    text-align: center;
+    width: 85%;
+    max-width: 600px;
+  }
+  .container {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    min-height: 90vh;
+  }
+  textarea {
+    width: 100%;
+  }
+  .error-content, .success-content {
+    display: none;
+  }
+  body.has-error .error-content,
+  body.has-success .success-content {
+    display: block;
+  }
+
+  body.has-error form,
+  body.has-success form {
+    display: none;
+  }
+
+</style>
+
+<script type="text/javascript">
+  const form = document.querySelector('#js-form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const quote = document.querySelector('#js-quote').value;
+    const character = document.querySelector('#js-character').value;
+
+    // const url = 'http://fierce-fjord-11955.herokuapp.com'
+    const url = 'http://localhost:8080';
+
+    if (!quote || !character) {
+      return;
+    } else {
+      const response = fetch(`${url}/add-quote?quote=${quote}&character=${character}`, {
+        method: 'POST',
+      }).then(response => {
+        if (response.status !== 200) {
+          document.body.classList.add('has-error')
+        } else {
+          document.body.classList.add('has-success');
+        }
+      })
+      .catch(error => {
+        document.body.classList.add('has-error')
+      })
+    }
+  })
+</script>
